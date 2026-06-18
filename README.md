@@ -1,4 +1,4 @@
-# Simulado PGE-CE Cebraspe Interativo v0.6 Modular
+# Simulado PGE-CE Cebraspe Interativo v0.7 Modular
 
 Abra `index.html` diretamente no navegador.
 
@@ -7,7 +7,7 @@ Abra `index.html` diretamente no navegador.
 - `index.html`: estrutura principal da aplicação.
 - `assets/css/styles.css`: estilos visuais.
 - `assets/js/questions.js`: banco de 100 questões.
-- `assets/js/data.js`: Radar Cebraspe e checklist do edital.
+- `assets/js/data.js`: Radar Cebraspe, checklist do edital e fontes analisadas.
 - `assets/js/app.js`: lógica da aplicação, correção, histórico, exportação e navegação.
 
 ## Como manter
@@ -35,3 +35,18 @@ Observação: as questões novas são autorais e adaptadas por tema/padrão de c
 
 - O cronômetro não inicia automaticamente ao abrir o arquivo.
 - Clique em **Iniciar simulado** para ativar a contagem regressiva e o tempo por questão.
+
+
+## Atualização v0.7 — Pareto 80/20
+
+Esta versão acrescenta:
+
+- botão **Pareto 80/20** no painel lateral;
+- análise de concentração de erros por tema;
+- priorização automática cruzando incidência Cebraspe, erros, brancos e marcações do usuário;
+- plano de revisão 80/20 no relatório final;
+- tabela com prioridade máxima/alta/média por tema;
+- exportação CSV do Pareto;
+- histórico de tentativas com temas Pareto prioritários.
+
+Critério de priorização: tema muito cobrado + baixo desempenho + erro/branco/marcação = prioridade mais alta.

@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Simulado PGE-CE Procurador | Cebraspe Interativo v0.6 Modular</title>
+  <title>Simulado PGE-CE Procurador | Cebraspe Interativo v0.7 Modular</title>
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
 <header>
   <div class="top">
-    <div class="brand"><div class="logo">PGE</div><div><h1>Simulado PGE-CE Procurador — Cebraspe</h1><div class="subtitle">v0.6 • modular • 130 questões autorais • provas Cebraspe analisadas • +1 / -0,33 / 0</div></div></div>
+    <div class="brand"><div class="logo">PGE</div><div><h1>Simulado PGE-CE Procurador — Cebraspe</h1><div class="subtitle">v0.7 • modular • 130 questões autorais • Pareto 80/20 • provas Cebraspe analisadas • +1 / -0,33 / 0</div></div></div>
     <div class="topActions">
       <select id="mode"><option value="prova">Modo Prova</option><option value="estudo">Modo Estudo</option></select>
       <select id="disciplineFilter"><option value="TODAS">Todas as disciplinas</option></select>
@@ -33,7 +33,7 @@
     </div>
     <div class="sectionTitle">Progresso</div><div class="progress"><div id="progressBar" class="bar"></div></div>
     <div class="sectionTitle">Disciplinas</div><div id="disciplineList"></div>
-    <div class="notice small"><b>Versão 0.6.</b> Base ampliada com questões autorais vinculadas a provas oficiais Cebraspe de Procuradorias. As provas oficiais foram usadas para mapeamento de tema, incidência e estilo, sem reprodução integral de enunciados.</div>
+    <div class="notice small"><b>Versão 0.7.</b> Inclui Painel Pareto 80/20, com concentração dos erros por tema, priorização por incidência Cebraspe e plano automático de revisão. As provas oficiais seguem usadas apenas para mapeamento de tema, incidência e estilo.</div>
   </aside>
   <main class="panel main">
     <div class="questionMeta" id="meta"></div>
@@ -54,11 +54,12 @@
   <section class="panel side">
     <div class="sectionTitle">Navegação</div><div class="navQs" id="qnav"></div>
     <div class="sectionTitle">Funcionalidades</div>
-    <table class="table"><tr><td>Modo prova/estudo</td><td>Ativo</td></tr><tr><td>Filtro por disciplina</td><td>Ativo</td></tr><tr><td>Histórico local</td><td>Ativo</td></tr><tr><td>Tempo por questão</td><td>Ativo</td></tr><tr><td>Radar Cebraspe</td><td>Ativo</td></tr><tr><td>Checklist do edital</td><td>Ativo</td></tr><tr><td>Provas Cebraspe analisadas</td><td>Ativo</td></tr></table>
+    <table class="table"><tr><td>Modo prova/estudo</td><td>Ativo</td></tr><tr><td>Filtro por disciplina</td><td>Ativo</td></tr><tr><td>Histórico local</td><td>Ativo</td></tr><tr><td>Tempo por questão</td><td>Ativo</td></tr><tr><td>Radar Cebraspe</td><td>Ativo</td></tr><tr><td>Checklist do edital</td><td>Ativo</td></tr><tr><td>Provas Cebraspe analisadas</td><td>Ativo</td></tr><tr><td>Pareto 80/20</td><td>Ativo</td></tr></table>
     <div class="sectionTitle">Ações</div>
     <button style="width:100%;margin-bottom:8px" onclick="showErrors()">Ver caderno de erros</button>
     <button style="width:100%;margin-bottom:8px" onclick="showHistory()">Histórico de tentativas</button>
     <button style="width:100%;margin-bottom:8px" onclick="showRadar()">Radar Cebraspe</button>
+    <button style="width:100%;margin-bottom:8px" onclick="showPareto()">Pareto 80/20</button>
     <button style="width:100%;margin-bottom:8px" onclick="showChecklist()">Checklist do edital</button>
     <button style="width:100%;margin-bottom:8px" onclick="showSources()">Provas Cebraspe analisadas</button>
     <button style="width:100%;margin-bottom:8px" onclick="exportCSV()">Exportar CSV</button>
@@ -69,6 +70,7 @@
 <dialog id="errorsDialog"><div class="modalBody"><h2>Caderno de erros e marcações</h2><div id="errorsContent"></div><div class="controls"><button onclick="document.getElementById('errorsDialog').close()">Fechar</button><button class="primary" onclick="redoErrors()">Refazer erradas</button></div></div></dialog>
 <dialog id="historyDialog"><div class="modalBody"><h2>Histórico de tentativas</h2><div id="historyContent"></div><div class="controls"><button onclick="document.getElementById('historyDialog').close()">Fechar</button><button class="dangerBtn" onclick="clearHistory()">Limpar histórico</button></div></div></dialog>
 <dialog id="radarDialog"><div class="modalBody"><h2>Radar Cebraspe — temas prioritários</h2><div id="radarContent"></div><div class="controls"><button onclick="document.getElementById('radarDialog').close()">Fechar</button></div></div></dialog>
+<dialog id="paretoDialog"><div class="modalBody"><h2>Pareto 80/20 — priorização de estudos</h2><div id="paretoContent"></div><div class="controls"><button onclick="document.getElementById('paretoDialog').close()">Fechar</button><button onclick="exportPareto()">Exportar Pareto CSV</button></div></div></dialog>
 <dialog id="checklistDialog"><div class="modalBody"><h2>Checklist do edital</h2><div id="checklistContent"></div><div class="controls"><button onclick="document.getElementById('checklistDialog').close()">Fechar</button><button onclick="exportChecklist()">Exportar checklist CSV</button></div></div></dialog>
 <dialog id="sourcesDialog"><div class="modalBody"><h2>Provas Cebraspe de Procuradorias analisadas</h2><div id="sourcesContent"></div><div class="controls"><button onclick="document.getElementById('sourcesDialog').close()">Fechar</button><button onclick="exportSources()">Exportar fontes CSV</button></div></div></dialog>
   <script src="assets/js/questions.js" defer></script>
