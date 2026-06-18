@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulado PGE-CE Procurador | Cebraspe Interativo v0.6 Modular</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand"><div class="logo">PGE</div><div><h1>Simulado PGE-CE Procurador — Cebraspe</h1><div class="subtitle">v0.6 • modular • 130 questões autorais • provas Cebraspe analisadas • +1 / -0,33 / 0</div></div></div>
+    <div class="topActions">
+      <select id="mode"><option value="prova">Modo Prova</option><option value="estudo">Modo Estudo</option></select>
+      <select id="disciplineFilter"><option value="TODAS">Todas as disciplinas</option></select>
+      <select id="sourceFilter"><option value="TODAS">Todas as provas-base</option></select>
+      <button id="startBtn" class="primary" onclick="startExam()">Iniciar simulado</button>
+      <button onclick="startQuickExam()">Simulado rápido</button>
+      <button onclick="shuffleQuestions()">Sortear ordem</button>
+      <button onclick="resetExam()">Reiniciar</button>
+      <button class="primary" onclick="finishExam()">Finalizar</button>
+    </div>
+  </div>
+</header>
+<div class="wrap">
+  <aside class="panel">
+    <div class="sectionTitle">Painel da prova</div>
+    <div class="metricGrid">
+      <div class="metric"><b id="timer">04:00:00</b><span>Cronômetro</span></div>
+      <div class="metric"><b id="doneCount">0/0</b><span>Respondidas</span></div>
+      <div class="metric"><b id="scoreLive">0,00</b><span>Nota parcial</span></div>
+      <div class="metric"><b id="paceLive">—</b><span>Tempo médio</span></div>
+    </div>
+    <div class="sectionTitle">Progresso</div><div class="progress"><div id="progressBar" class="bar"></div></div>
+    <div class="sectionTitle">Disciplinas</div><div id="disciplineList"></div>
+    <div class="notice small"><b>Versão 0.6.</b> Base ampliada com questões autorais vinculadas a provas oficiais Cebraspe de Procuradorias. As provas oficiais foram usadas para mapeamento de tema, incidência e estilo, sem reprodução integral de enunciados.</div>
+  </aside>
+  <main class="panel main">
+    <div class="questionMeta" id="meta"></div>
+    <div class="questionText" id="questionText"></div>
+    <div class="alts" id="alternatives"></div>
+    <div class="markRow">
+      <button id="markReview" onclick="toggleMark('review')">Revisar</button>
+      <button id="markDoubt" onclick="toggleMark('doubt')">Dúvida</button>
+      <button id="markGuess" onclick="toggleMark('guess')">Chutei</button>
+      <button id="markHard" onclick="toggleMark('hard')">Achei difícil</button>
+    </div>
+    <div id="explain" class="explain"></div>
+    <div class="controls">
+      <div><button onclick="prevQ()">Anterior</button> <button onclick="showQuestionTimer()">Tempo desta questão</button></div>
+      <div><button onclick="clearAnswer()">Limpar resposta</button> <button class="primary" onclick="nextQ()">Próxima</button></div>
+    </div>
+  </main>
+  <section class="panel side">
+    <div class="sectionTitle">Navegação</div><div class="navQs" id="qnav"></div>
+    <div class="sectionTitle">Funcionalidades</div>
+    <table class="table"><tr><td>Modo prova/estudo</td><td>Ativo</td></tr><tr><td>Filtro por disciplina</td><td>Ativo</td></tr><tr><td>Histórico local</td><td>Ativo</td></tr><tr><td>Tempo por questão</td><td>Ativo</td></tr><tr><td>Radar Cebraspe</td><td>Ativo</td></tr><tr><td>Checklist do edital</td><td>Ativo</td></tr><tr><td>Provas Cebraspe analisadas</td><td>Ativo</td></tr></table>
+    <div class="sectionTitle">Ações</div>
+    <button style="width:100%;margin-bottom:8px" onclick="showErrors()">Ver caderno de erros</button>
+    <button style="width:100%;margin-bottom:8px" onclick="showHistory()">Histórico de tentativas</button>
+    <button style="width:100%;margin-bottom:8px" onclick="showRadar()">Radar Cebraspe</button>
+    <button style="width:100%;margin-bottom:8px" onclick="showChecklist()">Checklist do edital</button>
+    <button style="width:100%;margin-bottom:8px" onclick="showSources()">Provas Cebraspe analisadas</button>
+    <button style="width:100%;margin-bottom:8px" onclick="exportCSV()">Exportar CSV</button>
+    <button style="width:100%" onclick="window.print()">Imprimir / salvar PDF</button>
+  </section>
+</div>
+<dialog id="resultDialog"><div class="modalBody"><h2>Relatório de Desempenho</h2><div id="resultContent"></div><div class="controls"><button onclick="document.getElementById('resultDialog').close()">Fechar</button><button onclick="copyReport()">Copiar relatório</button><button class="primary" onclick="window.print()">Imprimir relatório</button></div></div></dialog>
+<dialog id="errorsDialog"><div class="modalBody"><h2>Caderno de erros e marcações</h2><div id="errorsContent"></div><div class="controls"><button onclick="document.getElementById('errorsDialog').close()">Fechar</button><button class="primary" onclick="redoErrors()">Refazer erradas</button></div></div></dialog>
+<dialog id="historyDialog"><div class="modalBody"><h2>Histórico de tentativas</h2><div id="historyContent"></div><div class="controls"><button onclick="document.getElementById('historyDialog').close()">Fechar</button><button class="dangerBtn" onclick="clearHistory()">Limpar histórico</button></div></div></dialog>
+<dialog id="radarDialog"><div class="modalBody"><h2>Radar Cebraspe — temas prioritários</h2><div id="radarContent"></div><div class="controls"><button onclick="document.getElementById('radarDialog').close()">Fechar</button></div></div></dialog>
+<dialog id="checklistDialog"><div class="modalBody"><h2>Checklist do edital</h2><div id="checklistContent"></div><div class="controls"><button onclick="document.getElementById('checklistDialog').close()">Fechar</button><button onclick="exportChecklist()">Exportar checklist CSV</button></div></div></dialog>
+<dialog id="sourcesDialog"><div class="modalBody"><h2>Provas Cebraspe de Procuradorias analisadas</h2><div id="sourcesContent"></div><div class="controls"><button onclick="document.getElementById('sourcesDialog').close()">Fechar</button><button onclick="exportSources()">Exportar fontes CSV</button></div></div></dialog>
+  <script src="assets/js/questions.js" defer></script>
+  <script src="assets/js/data.js" defer></script>
+  <script src="assets/js/app.js" defer></script>
+
+</body>
+</html>
